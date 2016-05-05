@@ -6,7 +6,6 @@ import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jsoup.nodes.*;
-import org.jsoup.select.Elements;
 
 /**
  * Created by Khama on 2016-04-12.
@@ -95,7 +93,6 @@ public class Hello_World {
     }
 
     public static void main(String[] arg){
-
         ArrayList<String> links = getLinks();
         ArrayList<String> selectors = getSelectors();
 
