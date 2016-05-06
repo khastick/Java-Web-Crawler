@@ -14,10 +14,12 @@ import java.util.List;
 
 import org.jsoup.nodes.*;
 
+import javax.swing.*;
+
 /**
  * Created by Khama on 2016-04-12.
  */
-public class Hello_World {
+public class Hello_World extends JFrame{
     // decompose
     public static void process(Document d, String selector){
         String s = d.select(selector).isEmpty() ? "F" : "T";
@@ -93,6 +95,7 @@ public class Hello_World {
     }
 
     public static void main(String[] arg){
+        /*
         ArrayList<String> links = getLinks();
         ArrayList<String> selectors = getSelectors();
 
@@ -100,5 +103,20 @@ public class Hello_World {
             System.out.print(i + ": ");
             processLink(links.get(i),selectors);
         }
+        */
+        new Hello_World().start();
+    }
+
+    public void start(){
+        String[] selectors = new String[]{"a","b","c"}, elements = new String[]{"d","e","f"}, headings = new String[]{"g","h","i"};
+        String[][] results = new String[][]{
+                {"1","2","3"},
+                {"4","5","6"},
+                {"7","8","9"}
+        };
+
+        add(new CrawlerPanel(elements,selectors,results,headings));
+        setSize(400,400);
+        setVisible(true);
     }
 }
