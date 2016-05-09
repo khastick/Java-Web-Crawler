@@ -1,15 +1,28 @@
-public class CrawlerListPanel extends JPanel{
+import javax.swing.*;
+import java.awt.*;
+
+public class CrawlerListPanel extends JPanel {
   JList<String> list;
+  JPanel buttons;
   JButton add, remove;
   
-  public CrawlerListPanel(){
-    list = new JList<String>();
+  public CrawlerListPanel(String[] items){
+    list = new JList<String>(items);
     
-    add = new Jbutton();
+    add = new JButton();
     add.setText("add");
     
-    remove = new Jbutton();
-    remove.add("remove");
+    remove = new JButton();
+    remove.setText("rm");
+
+    buttons = new JPanel();
+    buttons.add(add);
+    buttons.add(remove);
+
+    setLayout(new BorderLayout());
+
+    add(list);
+    add(buttons, BorderLayout.PAGE_END);
   }
   
 }
