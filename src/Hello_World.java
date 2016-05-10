@@ -81,79 +81,77 @@ public class Hello_World extends JFrame{
 
     }
 
-    public static ArrayList<String> getS(){
-        String path = "./src/Selectors";
-
-        File csvData = new File(pathToLinks);
+    public static List<CSVRecord> getCSV(String path){
+        File csvData = new File(path);
         CSVParser parser;
-        int linksIndex = 0;
-        ArrayList<String> links = new ArrayList<String>();
-        List<CSVRecord> records;
 
         try {
             parser = CSVParser.parse(csvData, Charset.defaultCharset(),CSVFormat.DEFAULT);
-            records = parser.getRecords();
-            linksIndex = findLinksColumn(parser,records);
-
-
-            for (CSVRecord record : records) {
-                links.add(record.get(linksIndex));
-            }
+            return parser.getRecords();
         } catch (IOException e) {
-            System.out.print("An io error occurred when retreiving the list of links");
+            System.out.print("An io error occurred when trying to open to file " + path);
         }
-        links.remove(0); // remove the heading
-        return links;
 
+        return null;
     }
 
-    public static HashMap<String,String[]> getSelectors(){
+    public static String[][] getTableFill(List<String> links, List<CSVRecord> selectors){
+        String[][] filler = new String[links.size()][selectors.size()];
 
-        String pathToSelectors = "./src/Selectors";
-        HashMap<String,String[]> decompMap = new HashMap<>();
-
-        try{
-            for (String fileLine : Files.readAllLines(Paths.get(pathToSelectors))) {
-                String[] line = fileLine.split(",");
-                String element = line[0];
-                String[] selectors = Arrays.copyOfRange(line,1,line.length);
-                decompMap.put(element, selectors);
-            }
-        } catch (IOException e){
-            System.out.print("An io error occurred when receiving the selectors");
+        for(int i = 0; i < links.size(); i++){
+            filler[i][0] = links.get(i);
         }
 
-        return selectors;
+        for(int i = 0; i < selectors.size(); i++){
+            CSVRecord record = selectors.get(i);
+            filler[0][i+1] = record.get(0);
+        }
+
+        return filler;
+    }
+
+    public static String[] getHeadings(List<CSVRecord> selectors){
+        String [] headings = new String[selectors.size()];
+        for(int i = 0; i < selectors.size(); i++) {
+            CSVRecord record = selectors.get(i);
+            headings[i] = record.get(0);
+        }
+        return headings;
+    }
+
+    public static String [][] getData(List<String> links, List<CSVRecord> selectors){
+        String[][] data = new String[links.size()][selectors.size()];
+        for(int i = 0; i < links.size(); i++){
+            data[i][0] = links.get(i);
+        }
+        return data;
     }
 
     public static void main(String[] arg){
 
-        ArrayList<String> links = getLinks();
+        List<String> links = getLinks();
 
-        ArrayList<String> selectors = getSelectors();
+        List<CSVRecord> selectors = getCSV("./src/Selectors.csv");
+        //System.out.print(selectors);
+
         /*
         for(int i = 0; i < links.size(); i++){
             System.out.print(i + ": ");
             processLink(links.get(i),selectors);
         }
         */
-        new Hello_World().start();
+        new Hello_World().start(links,selectors);
     }
 
-    public void start(String[] links, String[] selectors){
+    public void start(List<String> links, List<CSVRecord> selectors){
 
-        String[] selectors = new String[]{"a","b","c"}, elements = new String[]{"d","e","f"};
+        String[] elements = new String[]{"d","e","f"};
 
-        String[] headings = new String[]{"links"} + elements;
-        ArrayList<String> h;
-        h.addAll()
-        String[][] results = new String[][]{
-                {"1","2","3"},
-                {"4","5","6"},
-                {"7","8","9"}
-        };
+        String[] select = new String[]{"a","b","c"};
 
-        add(new CrawlerPanel(elements,selectors,results,headings));
+
+
+        add(new CrawlerPanel(elements,select,getData(links,selectors),getHeadings(selectors)));
         setSize(400,400);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
