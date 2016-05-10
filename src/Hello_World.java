@@ -111,10 +111,11 @@ public class Hello_World extends JFrame{
     }
 
     public static String[] getHeadings(List<CSVRecord> selectors){
-        String [] headings = new String[selectors.size()];
+        String [] headings = new String[selectors.size()+1];
+        headings[0] = "Links";
         for(int i = 0; i < selectors.size(); i++) {
             CSVRecord record = selectors.get(i);
-            headings[i] = record.get(0);
+            headings[i+1] = record.get(0);
         }
         return headings;
     }
@@ -148,8 +149,6 @@ public class Hello_World extends JFrame{
         String[] elements = new String[]{"d","e","f"};
 
         String[] select = new String[]{"a","b","c"};
-
-
 
         add(new CrawlerPanel(elements,select,getData(links,selectors),getHeadings(selectors)));
         setSize(400,400);
