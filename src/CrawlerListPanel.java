@@ -5,10 +5,25 @@ public class CrawlerListPanel extends JPanel {
   JList<String> list;
   JPanel buttons;
   JButton add, remove;
-  
+  JScrollPane scroller;
+
+  public JList<String> getList() {
+    return list;
+  }
+
+  public JButton getAdd() {
+    return add;
+  }
+
+  public JButton getRemove() {
+    return remove;
+  }
+
   public CrawlerListPanel(String[] items){
     list = new JList<String>(items);
-    
+
+    scroller = new JScrollPane(list);
+
     add = new JButton();
     add.setText("add");
     
@@ -21,7 +36,7 @@ public class CrawlerListPanel extends JPanel {
 
     setLayout(new BorderLayout());
 
-    add(list);
+    add(scroller);
     add(buttons, BorderLayout.PAGE_END);
   }
   

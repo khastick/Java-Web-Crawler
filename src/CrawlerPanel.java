@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
 /**
@@ -6,13 +8,23 @@ import javax.swing.table.TableColumn;
  */
 public class CrawlerPanel extends JPanel {
 
-    JScrollPane tableScroll;
+    JScrollPane tableScroll, listSelectorsScroll, listElement;
     JTable tableResults;
     CrawlerListPanel listSelectors, listElements;
 
+    public CrawlerListPanel getListSelectors() {
+        return listSelectors;
+    }
+
+    public CrawlerListPanel getListElements() {
+        return listElements;
+    }
+
+    public JTable getTableResults() {
+        return tableResults;
+    }
+
     public CrawlerPanel(String[] elements, String[] selectors, String[][] results, String[] headings){
-
-
         tableResults = new JTable(results, headings);
         tableResults.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tableResults.setRowHeight(20);
