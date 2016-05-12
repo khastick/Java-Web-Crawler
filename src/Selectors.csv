@@ -35,7 +35,7 @@ Image, img
 Image in expand/collapse
 Image with caption
 Image with increase/decrease display size
-Image with link
+Image with link, a > img
 Image with long description
 Image with text
 Image-floated, img.pull-right
@@ -56,7 +56,7 @@ Link, a
 Link to predefined search
 Link with button style
 Link with icon
-List
+List, ol, ul, dl
 List with block style
 List-alphabetical
 List-nested
@@ -94,13 +94,13 @@ Table of contents
 Table of contents for a set of related pages
 Table of contents for in-page navigation
 Table of contents with multiple levels
-Table with caption-table caption
-Table with column headings
+Table with caption,table>caption
+Table with column headings,table>tr>th
 Table with column highlighting
-Table with footer
+Table with footer,tfoot
 Table with footnotes
 Table with full-row link
-Table with merged cells
+Table with merged cells,td[rowspan~=[0-9]],td[colspan~=[0-9]]
 Table with multiple heading levels
 Table with multiple table bodies
 Table with no headings
