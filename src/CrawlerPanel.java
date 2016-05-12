@@ -11,6 +11,11 @@ public class CrawlerPanel extends JPanel {
     JScrollPane tableScroll, listSelectorsScroll, listElement;
     JTable tableResults;
     CrawlerListPanel listSelectors, listElements;
+    JButton butProcess;
+
+    public JButton getButProcess() {
+        return butProcess;
+    }
 
     public CrawlerListPanel getListSelectors() {
         return listSelectors;
@@ -34,10 +39,12 @@ public class CrawlerPanel extends JPanel {
             column.setPreferredWidth(100);
         }
 
+        butProcess = new JButton("Process");
         listSelectors = new CrawlerListPanel(selectors);
         listElements = new CrawlerListPanel(elements);
         tableScroll = new JScrollPane(tableResults);
 
+        add(butProcess);
         add(listElements);
         add(listSelectors);
         add(tableScroll);
