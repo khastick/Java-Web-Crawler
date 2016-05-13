@@ -1,19 +1,6 @@
-import com.sun.deploy.util.ArrayUtil;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import org.jsoup.Jsoup;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-
-import org.jsoup.nodes.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -24,18 +11,14 @@ import javax.swing.event.ListSelectionListener;
  */
 public class Hello_World extends JFrame{
 
-    Crawler crawler;
-    CrawlerPanel crawlerPanel;
+    private Crawler crawler;
+    private CrawlerPanel crawlerPanel;
     int selected;
 
+    /*
+    Main
+     */
     public static void main(String[] arg){
-        /*
-        for(int i = 0; i < links.size(); i++){
-            System.out.print(i + ": ");
-            processLink(links.get(i),selectors);
-        }
-        */
-
         new Hello_World().start();
     }
 
