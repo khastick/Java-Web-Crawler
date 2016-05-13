@@ -2,7 +2,7 @@ Selectors have a name and a query. If a query is successful the selector's name 
 The selectors are stored with a comma separating the name and list of queries.
 
 To do
-Load in a list of sites
+
 Load in each sites' links
 Enable the context of a search to be included
 UI
@@ -10,8 +10,12 @@ Two list one is the context. The other is a list of selectors.
 At the bottom is a list of sites processed. As the sites are processed the list of elements appears next to the site.
 There is an add and delete button at the bottom of the list.
     The delete button is disabled when nothing is selected
-When the add button is pressed a popup appears to enter a selector
 When a list item is selected the delete button is enabled.
     Click the delete button and the item is removed
+*Update the table as a site is processed
+*save new elements and selectors to a file
+*save table results to a file.
 
-
+Done
+Load in a list of sites
+When the add button is pressed a popup appears to enter a selector

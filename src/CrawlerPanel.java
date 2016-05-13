@@ -8,28 +8,34 @@ import javax.swing.table.TableColumn;
  */
 public class CrawlerPanel extends JPanel {
 
-    JScrollPane tableScroll, listSelectorsScroll, listElement;
-    JTable tableResults;
-    CrawlerListPanel listSelectors, listElements;
-    JButton butProcess;
+    private JScrollPane tableScroll, listSelectorsScroll, listElement;
+    private JTable tableResults;
+    private CrawlerListPanel listSelectors, listElements;
+    private JButton process;
 
-    public JButton getButProcess() {
-        return butProcess;
+    JButton getProcess() {
+        return process;
     }
 
-    public CrawlerListPanel getListSelectors() {
+    CrawlerListPanel getListSelectors() {
         return listSelectors;
     }
 
-    public CrawlerListPanel getListElements() {
+    CrawlerListPanel getListElements() {
         return listElements;
     }
 
-    public JTable getTableResults() {
+    JTable getTableResults() {
         return tableResults;
     }
 
-    public CrawlerPanel(String[] elements, String[] selectors, String[][] results, String[] headings){
+    void setTableRow(int index, String[] row){
+        for(int i = 0; i < row.length; i++){
+            tableResults.getModel().setValueAt(row[i], index, i+1);
+        }
+    }
+
+    CrawlerPanel(String[] elements, String[] selectors, String[][] results, String[] headings){
         tableResults = new JTable(results, headings);
         tableResults.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tableResults.setRowHeight(20);
@@ -39,12 +45,12 @@ public class CrawlerPanel extends JPanel {
             column.setPreferredWidth(100);
         }
 
-        butProcess = new JButton("Process");
+        process = new JButton("Process");
         listSelectors = new CrawlerListPanel(selectors);
         listElements = new CrawlerListPanel(elements);
         tableScroll = new JScrollPane(tableResults);
 
-        add(butProcess);
+        add(process);
         add(listElements);
         add(listSelectors);
         add(tableScroll);

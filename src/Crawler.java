@@ -14,60 +14,91 @@ import java.util.*;
  */
 public class Crawler {
 
-    Map<String, List<String>> selectors;
-    List<String> links;
+    private Map<String, List<String>> selectors;
+    private List<String> links;
+    private String[][] table;
 
-    public List<String> getLinks(){
+    /*
+    Getters and Setters
+     */
+
+    void setTableRow(int index, String[] row) {
+        table[index] = row;
+    }
+
+    List<String> getLinks(){
         return links;
     }
 
-    public Map<String, List<String>> getSelectors(){
+    Map<String, List<String>> getSelectors(){
         return selectors;
     }
 
-    public List<String> getSelectors(String element){
+    List<String> getSelectors(String element){
         return selectors.get(element);
     }
 
-    public Crawler(){
-        links = extractLinks();
-
-        List<CSVRecord> selectorsCSV = getCSV("./src/Selectors.csv");
-        selectors = extractSelectors(selectorsCSV);
-    }
-
-    public String[] getElements(){
+    String[] getElements(){
         Set<String> elements = selectors.keySet();
 
         return elements.toArray(new String[]{});
     }
 
-    public String generateJSoupQuery(String element){
-        String query="";
-        List<String> selectorBody = selectors.get(element);
-        for(int i = 0; i < selectorBody.size()-1; i++){
-            query += selectorBody.get(i) + ",";
+     String[] getHeadings(){
+        String[]    elements = getElements(),
+                    headings = new String[elements.length+1];
+        headings[0] = "Links";
+
+        for(int i = 0; i < elements.length; i++){
+            headings[i+1] = elements[i];
         }
-        query += selectorBody.get(selectorBody.size()-1); // add last element
-        return query;
+        return headings;
     }
 
-    public  String process(Document d, String selector){
-        String s = d.select(selector).isEmpty() ? "0" : "1";
-        return s;
+     String [][] getData(){
+        String[][] data = new String[links.size()][selectors.size()+1];
+        for(int i = 0; i < links.size(); i++){
+            data[i][0] = links.get(i);
+        }
+        return data;
     }
 
-    public  String[] processLink(String link, ArrayList<String> lstSelector){
+    /*
+    Constructor
+     */
+
+    Crawler(){
+        links = extractLinks();
+
+        List<CSVRecord> selectorsCSV = getCSV("./src/Selectors.csv");
+        selectors = extractSelectors(selectorsCSV);
+
+        initializeTable();
+    }
+
+    /*
+    Functions
+     */
+
+     String[] processLink(String link){
         String[] results = {};
         try{
             Document d = Jsoup.connect(link).get();
-
             Set<String> elements = selectors.keySet();
             results = new String[elements.size()];
-            String[] aElements = (String[])elements.toArray();
+            Object[] aElements = elements.toArray();
+            String element, query;
 
             for(int i = 0; i < aElements.length; i++){
-                results[i] = process(d,selectors.get(aElements[i]).toString());
+                element = (String)aElements[i];
+                query = getSelectors().get(element).toString();
+                query = query.substring(1,query.length()-1).trim(); // remove array brackets and trim
+
+                if(query.isEmpty()){ // this won't be necessary when all of the elements have related queries
+                    results[i] = "0";
+                } else {
+                    results[i] = d.select(query).isEmpty() ? "0" : "1";
+                }
             }
             return results;
         } catch (IOException e){
@@ -76,14 +107,10 @@ public class Crawler {
         return results;
     }
 
-    public String[][] processFile(List<String> links, List<String> lstSelectors){
-        String[][] results= {};
-
-        return results;
-    }
-
-    public  int findLinksColumn(CSVParser parser, List<CSVRecord> records ){
-
+    /*
+    Private helper functions
+     */
+    private int findLinksColumn(CSVParser parser, List<CSVRecord> records ){
         CSVRecord headings = records.get(0);
         for(int i = 0; i < headings.size(); i++){
             String entry = headings.get(i);
@@ -95,7 +122,7 @@ public class Crawler {
         return 0;
     }
 
-    List<CSVRecord> getCSV(String path){
+    private List<CSVRecord> getCSV(String path){
         File csvData = new File(path);
         CSVParser parser;
 
@@ -109,31 +136,12 @@ public class Crawler {
         return null;
     }
 
-    public  String[] getHeadings(){
-        String[] elements = getElements();
-        String [] headings = new String[elements.length+1];
-        headings[0] = "Links";
-
-        for(int i = 0; i < elements.length; i++){
-            headings[i+1] = elements[i];
-        }
-        return headings;
-    }
-
-    public  String [][] getData(){
-        String[][] data = new String[links.size()][selectors.size()];
-        for(int i = 0; i < links.size(); i++){
-            data[i][0] = links.get(i);
-        }
-        return data;
-    }
-
     // opens the csv file containing the list of selectors and their elements
-    TreeMap<String, List<String>> extractSelectors (List<CSVRecord> records){
+    private TreeMap<String, List<String>> extractSelectors (List<CSVRecord> records){
         TreeMap<String, List<String>> selectors = new TreeMap<>();
         for(int i = 0; i < records.size(); i++){
             CSVRecord record = records.get(i);
-            String head = (String)record.get(0);
+            String head = record.get(0);
             List<String> body = new ArrayList<>();
 
             for(int j = 1; j < record.size(); j++){
@@ -144,7 +152,7 @@ public class Crawler {
         return selectors;
     }
 
-    ArrayList<String> extractLinks(){
+    private ArrayList<String> extractLinks(){
         String pathToLinks = "./src/links.csv";
         File csvData = new File(pathToLinks);
         CSVParser parser;
@@ -165,5 +173,11 @@ public class Crawler {
         }
         links.remove(0); // remove the heading
         return links;
+    }
+
+    private void initializeTable(){
+        Object[] elements = selectors.keySet().toArray();
+        table = new String[links.size()][elements.length];
+
     }
 }

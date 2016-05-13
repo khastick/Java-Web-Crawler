@@ -40,7 +40,7 @@ public class Hello_World extends JFrame{
     }
 
     void elementAddAction(JList list){
-        String element = (String)JOptionPane.showInputDialog("Add Element");
+        String element = JOptionPane.showInputDialog("Add Element");
         Map<String, List<String>> selectors = crawler.getSelectors();
         selectors.put(element,new ArrayList<String>());
         list.setListData(crawler.getElements());
@@ -48,12 +48,12 @@ public class Hello_World extends JFrame{
 
     void elementRemoveAction(JList list){
         String element = (String)list.getSelectedValue();
-        crawler.selectors.remove(element);
+        crawler.getSelectors().remove(element);
         list.setListData(crawler.getElements());
     }
 
     void selectorAddAction(JList lstElement, JList lstSelector){
-        String selector = (String)JOptionPane.showInputDialog("Add Selector");
+        String selector = JOptionPane.showInputDialog("Add Selector");
         String element = (String)lstElement.getSelectedValue();
         Map<String, List<String>> selectors = crawler.getSelectors();
         List<String> selectorBody = selectors.get(element);
@@ -82,16 +82,37 @@ public class Hello_World extends JFrame{
         lstSelector.setListData(selectorBody.toArray());
     }
 
+    void processAction(){
+        List<String> links = crawler.getLinks();
+        String link;
+        String[] results;
+
+            for(int i = 0; i < links.size(); i++){
+                link = links.get(i);
+                results = crawler.processLink(link);
+                crawler.setTableRow(i,results);
+                crawlerPanel.setTableRow(i,results);
+            }
+    }
+
     public void start(){
         crawler = new Crawler();
         crawlerPanel = new CrawlerPanel(crawler.getElements(),new String[]{},crawler.getData(),crawler.getHeadings());
-        JList elementList = crawlerPanel.getListElements().getList(),
+        JList   elementList = crawlerPanel.getListElements().getList(),
                 selectorList = crawlerPanel.getListSelectors().getList();
         Map<String, List<String>> selectors = crawler.getSelectors();
-        JButton add, remove;
+        JButton add, remove, process;
 
         remove = crawlerPanel.getListElements().getRemove();
         add = crawlerPanel.getListElements().getAdd();
+        process = crawlerPanel.getProcess();
+
+        process.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                processAction();
+            }
+        });
 
         add.addActionListener(new ActionListener() {
             @Override
