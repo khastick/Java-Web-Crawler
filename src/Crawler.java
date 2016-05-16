@@ -16,7 +16,8 @@ import java.util.*;
  */
 public class Crawler {
     private final String    SELECTOR_PATH = "./src/Selectors.csv",
-                            LINKS_PATH = "./src/links.csv";
+                            LINKS_PATH = "./src/links.csv",
+                            RESULTS_PATH = "./src/results.csv";
     private Map<String, List<String>> selectors;
     private String[][] table;
 
@@ -67,9 +68,9 @@ public class Crawler {
 
     Crawler(){
         List<CSVRecord> selectorsCSV = getCSV(SELECTOR_PATH);
-        selectors = extractSelectors(selectorsCSV);
+        selectors = loadSelectors(selectorsCSV);
 
-        initializeTable();
+        loadTable();
     }
 
     /*
@@ -108,47 +109,6 @@ public class Crawler {
         saveResults();
     }
 
-    private void saveSelectors(){
-        File f = new File(SELECTOR_PATH);
-        try{
-            FileWriter writer = new FileWriter(f);
-            CSVPrinter printer = new CSVPrinter(writer,CSVFormat.DEFAULT);
-            Object[]    elements = selectors.keySet().toArray();
-            List<String> queries;
-            String element;
-
-            for(int i = 0; i < elements.length; i++){
-                element = (String)elements[i];
-                queries = selectors.get(element);
-                queries.add(0,element);
-                printer.printRecord(queries);
-                printer.flush();
-            }
-            printer.close();
-            writer.close();
-        } catch (IOException e){
-            System.out.println("there was an issue when saving the selectors");
-        }
-    }
-
-    private void saveResults(){
-        File f = new File(SELECTOR_PATH);
-        try {
-            FileWriter writer = new FileWriter(f,true);
-            CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
-
-            for(int i = 0; i < table.length; i++){
-               printer.printRecord(table[i]);
-                printer.flush();
-            }
-            printer.close();
-            writer.close();
-        } catch (IOException e){
-            System.out.println("There was an issue when saving the results table");
-        }
-
-    }
-
     /*
     Private helper functions
      */
@@ -179,7 +139,7 @@ public class Crawler {
     }
 
     // opens the csv file containing the list of selectors and their elements
-    private TreeMap<String, List<String>> extractSelectors (List<CSVRecord> records){
+    private TreeMap<String, List<String>> loadSelectors (List<CSVRecord> records){
         TreeMap<String, List<String>> selectors = new TreeMap<>();
         for(int i = 0; i < records.size(); i++){
             CSVRecord record = records.get(i);
@@ -194,7 +154,7 @@ public class Crawler {
         return selectors;
     }
 
-    private void initializeTable(){
+    private void loadTable(){
         File csvData = new File(LINKS_PATH);
         CSVParser parser;
         int linksIndex = 0;
@@ -209,10 +169,51 @@ public class Crawler {
 
             for(int i = 1; i < records.size(); i++){
                 link = records.get(i).get(linksIndex);
-                table[i][0] = link;
+                table[i-1][0] = link;
             }
         } catch (IOException e) {
-            System.out.print("An io error occurred when retreiving the list of links");
+            System.out.print("An io error occurred when retrieving the list of links");
         }
+    }
+
+    private void saveSelectors(){
+        File f = new File(SELECTOR_PATH);
+        try{
+            FileWriter writer = new FileWriter(f);
+            CSVPrinter printer = new CSVPrinter(writer,CSVFormat.DEFAULT);
+            Object[]    elements = selectors.keySet().toArray();
+            List<String> queries;
+            String element;
+
+            for(int i = 0; i < elements.length; i++){
+                element = (String)elements[i];
+                queries = selectors.get(element);
+                queries.add(0,element);
+                printer.printRecord(queries);
+                printer.flush();
+            }
+            printer.close();
+            writer.close();
+        } catch (IOException e){
+            System.out.println("there was an issue when saving the selectors");
+        }
+    }
+
+    private void saveResults(){
+        File f = new File(RESULTS_PATH);
+        try {
+            FileWriter writer = new FileWriter(f,true);
+            CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+            for(int i = 0; i < table.length; i++){
+                printer.printRecord(table[i]);
+                printer.flush();
+            }
+            printer.close();
+            writer.close();
+        } catch (IOException e){
+            System.out.println("There was an issue when saving the results table");
+        }
+
     }
 }

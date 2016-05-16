@@ -15,7 +15,6 @@ public class Hello_World extends JFrame{
 
     private Crawler crawler;
     private CrawlerPanel crawlerPanel;
-    int selected;
 
     /*
     Main
@@ -59,11 +58,10 @@ public class Hello_World extends JFrame{
 
     void elementListSelect(ListSelectionEvent e, Map<String,List<String>> selectors,JList lstSelector ){
         JList list = (JList)e.getSource();
-        String listSelected;
+        String selected;
 
-        selected = list.getSelectedIndex();
-        listSelected = (String)list.getSelectedValue();
-        List<String> selectorBody = selectors.get(listSelected);
+        selected = (String)list.getSelectedValue();
+        List<String> selectorBody = selectors.get(selected);
         lstSelector.setListData(selectorBody.toArray());
     }
 

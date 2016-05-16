@@ -27,8 +27,10 @@ public class CrawlerPanel extends JPanel {
     }
 
     void setTableRow(int index, String[] row){
+        String entry;
         for(int i = 0; i < row.length; i++){
-            table.getModel().setValueAt(row[i], index, i+1);
+            entry = row[i];
+            table.getModel().setValueAt(entry, index, i+1);
         }
     }
 
