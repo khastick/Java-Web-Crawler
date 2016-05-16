@@ -1,5 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.*;
 
 import javax.swing.*;
@@ -80,7 +82,12 @@ public class Hello_World extends JFrame{
 
     public void start(){
         crawler = new Crawler();
-        crawlerPanel = new CrawlerPanel(crawler.getElements(),new String[]{},crawler.getData(),crawler.getHeadings());
+        crawlerPanel = new CrawlerPanel(
+                crawler.getElements(),
+                new String[]{},
+                crawler.getTable(),
+                crawler.getHeadings()
+        );
         JList   elementList = crawlerPanel.getListElements().getList(),
                 selectorList = crawlerPanel.getListSelectors().getList();
         Map<String, List<String>> selectors = crawler.getSelectors();
@@ -132,6 +139,43 @@ public class Hello_World extends JFrame{
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 elementListSelect(e,selectors,selectorList);
+            }
+        });
+
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                crawler.save();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
             }
         });
 

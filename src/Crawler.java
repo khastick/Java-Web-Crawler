@@ -1,10 +1,12 @@
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -13,9 +15,9 @@ import java.util.*;
  * Created by Khama on 2016-05-11.
  */
 public class Crawler {
-
+    private final String    SELECTOR_PATH = "./src/Selectors.csv",
+                            LINKS_PATH = "./src/links.csv";
     private Map<String, List<String>> selectors;
-    private List<String> links;
     private String[][] table;
 
     /*
@@ -27,15 +29,15 @@ public class Crawler {
     }
 
     List<String> getLinks(){
+        List<String> links = new ArrayList<String>();
+        for(int i = 0; i < table.length; i++){
+            links.add(table[i][0]);
+        }
         return links;
     }
 
     Map<String, List<String>> getSelectors(){
         return selectors;
-    }
-
-    List<String> getSelectors(String element){
-        return selectors.get(element);
     }
 
     String[] getElements(){
@@ -55,12 +57,8 @@ public class Crawler {
         return headings;
     }
 
-     String [][] getData(){
-        String[][] data = new String[links.size()][selectors.size()+1];
-        for(int i = 0; i < links.size(); i++){
-            data[i][0] = links.get(i);
-        }
-        return data;
+     String [][] getTable(){
+         return table;
     }
 
     /*
@@ -68,9 +66,7 @@ public class Crawler {
      */
 
     Crawler(){
-        links = extractLinks();
-
-        List<CSVRecord> selectorsCSV = getCSV("./src/Selectors.csv");
+        List<CSVRecord> selectorsCSV = getCSV(SELECTOR_PATH);
         selectors = extractSelectors(selectorsCSV);
 
         initializeTable();
@@ -105,6 +101,52 @@ public class Crawler {
             System.out.print("An io error occurred with Jsoup");
         }
         return results;
+    }
+
+    void save(){
+        saveSelectors();
+        saveResults();
+    }
+
+    private void saveSelectors(){
+        File f = new File(SELECTOR_PATH);
+        try{
+            FileWriter writer = new FileWriter(f);
+            CSVPrinter printer = new CSVPrinter(writer,CSVFormat.DEFAULT);
+            Object[]    elements = selectors.keySet().toArray();
+            List<String> queries;
+            String element;
+
+            for(int i = 0; i < elements.length; i++){
+                element = (String)elements[i];
+                queries = selectors.get(element);
+                queries.add(0,element);
+                printer.printRecord(queries);
+                printer.flush();
+            }
+            printer.close();
+            writer.close();
+        } catch (IOException e){
+            System.out.println("there was an issue when saving the selectors");
+        }
+    }
+
+    private void saveResults(){
+        File f = new File(SELECTOR_PATH);
+        try {
+            FileWriter writer = new FileWriter(f,true);
+            CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+            for(int i = 0; i < table.length; i++){
+               printer.printRecord(table[i]);
+                printer.flush();
+            }
+            printer.close();
+            writer.close();
+        } catch (IOException e){
+            System.out.println("There was an issue when saving the results table");
+        }
+
     }
 
     /*
@@ -145,39 +187,32 @@ public class Crawler {
             List<String> body = new ArrayList<>();
 
             for(int j = 1; j < record.size(); j++){
-                body.add(record.get(j));
+                body.add(record.get(j).trim());
             }
             selectors.put(head,body);
         }
         return selectors;
     }
 
-    private ArrayList<String> extractLinks(){
-        String pathToLinks = "./src/links.csv";
-        File csvData = new File(pathToLinks);
+    private void initializeTable(){
+        File csvData = new File(LINKS_PATH);
         CSVParser parser;
         int linksIndex = 0;
-        ArrayList<String> links = new ArrayList<String>();
         List<CSVRecord> records;
+        String link;
 
         try {
             parser = CSVParser.parse(csvData, Charset.defaultCharset(), CSVFormat.DEFAULT);
             records = parser.getRecords();
             linksIndex = findLinksColumn(parser,records);
+            table = new String[records.size()-1][getElements().length+1]; // -1 one for the header, +1 for the link
 
-            for (CSVRecord record : records) {
-                links.add(record.get(linksIndex));
+            for(int i = 1; i < records.size(); i++){
+                link = records.get(i).get(linksIndex);
+                table[i][0] = link;
             }
         } catch (IOException e) {
             System.out.print("An io error occurred when retreiving the list of links");
         }
-        links.remove(0); // remove the heading
-        return links;
-    }
-
-    private void initializeTable(){
-        Object[] elements = selectors.keySet().toArray();
-        table = new String[links.size()][elements.length];
-
     }
 }

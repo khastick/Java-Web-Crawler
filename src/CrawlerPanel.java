@@ -6,7 +6,7 @@ import javax.swing.table.TableColumn;
  */
 public class CrawlerPanel extends JPanel {
 
-    private JScrollPane tableScroll, listSelectorsScroll, listElement;
+    private JScrollPane tableScroll;
     private JTable table;
     private CrawlerListPanel listSelectors, listElements;
     private JButton process;
