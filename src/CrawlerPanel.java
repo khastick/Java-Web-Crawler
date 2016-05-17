@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.TableColumn;
+import java.awt.*;
 
 /**
  * Created by Khama on 2016-05-06.
@@ -26,14 +27,6 @@ public class CrawlerPanel extends JPanel {
         return listElements;
     }
 
-    void setTableRow(int index, String[] row){
-        String entry;
-        for(int i = 0; i < row.length; i++){
-            entry = row[i];
-            table.getModel().setValueAt(entry, index, i+1);
-        }
-    }
-
     /*
     Constructor
      */
@@ -55,6 +48,6 @@ public class CrawlerPanel extends JPanel {
         add(process);
         add(listElements);
         add(listSelectors);
-        add(tableScroll);
+        add(tableScroll, BorderLayout.LINE_END);
     }
 }

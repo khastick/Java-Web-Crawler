@@ -1,7 +1,7 @@
 Abbreviation
 Advanced service initiation page template
-Archived content notice
-Aside
+Archived content notice,div#archived
+Aside,aside
 Aside with fixed width
 Aside with footer
 Aside with heading
@@ -11,7 +11,7 @@ Aside-in-text
 Asset download with thumbnail
 Blockquote,blockquote
 Body text,p
-Body text with heading
+Body text with heading,h2 + p
 Calendar of events
 Carousel
 Chart
@@ -19,7 +19,7 @@ Column layout
 Column layout with 1:1 ratio
 Column layout with 1:1:1 ratio
 Column layout with 2:1 ratio
-Contextual notice
+Contextual notice,section.alert*
 Date picker
 Dynamic content blocks
 Expand/collapse
@@ -43,8 +43,8 @@ Image-floated,img.pull-right
 Image-image map
 Index
 Index displayed as a map
-Index page-alphabetical
 Index page for a set of related pages
+Index page-alphabetical
 Input,input
 Input-button,input[type=button]
 Input-checkbox group,input[type=checkbox]
@@ -65,16 +65,16 @@ List-numbered,ol
 List-roman numerals
 List-unordered,ul
 List-unstyled
-Local navigation
+Local navigation,nav[role=navigation]
 Local navigation with section headings
-Local navigation-children links
+Local navigation-children links,nav[role=navigation] li ul
 Local navigation-multiple levels
 Local navigation-multiple sections
 Local navigation-sibling links
-Multimedia player
+Multimedia player,video
 Multimedia player with share link
-Multimedia player-video
-Page title
+Multimedia player-video,video
+Page title,main[role=main] > h1
 Pagination
 Pagination-current page indicator
 Pagination-previous and next links

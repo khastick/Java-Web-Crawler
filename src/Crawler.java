@@ -25,8 +25,9 @@ public class Crawler {
     Getters and Setters
      */
 
-    void setTableRow(int index, String[] row) {
-        table[index] = row;
+    void setTableRow(int index, String[] src) {
+        String[] dest = table[index];
+        System.arraycopy(src,0,dest,1,src.length);
     }
 
     List<String> getLinks(){

@@ -74,7 +74,6 @@ public class Hello_World extends JFrame{
                 link = links.get(i);
                 results = crawler.processLink(link);
                 crawler.setTableRow(i,results);
-                crawlerPanel.setTableRow(i,results);
             }
     }
 
@@ -178,7 +177,7 @@ public class Hello_World extends JFrame{
         });
 
         add(crawlerPanel);
-        setSize(400,400);
+        setSize(800,700);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
