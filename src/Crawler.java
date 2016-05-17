@@ -48,6 +48,13 @@ public class Crawler {
         return elements.toArray(new String[]{});
     }
 
+    void setElements(String oldKey, String newKey){
+        List selector = selectors.get(oldKey);
+        selectors.remove(oldKey);
+        selectors.put(newKey,selector);
+
+    }
+
      String[] getHeadings(){
         String[]    elements = getElements(),
                     headings = new String[elements.length+1];

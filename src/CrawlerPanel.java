@@ -41,6 +41,8 @@ public class CrawlerPanel extends JPanel {
         }
 
         process = new JButton("Process");
+        process.setPreferredSize(new Dimension(100,100));
+
         listSelectors = new CrawlerListPanel(selectors);
         listElements = new CrawlerListPanel(elements);
         tableScroll = new JScrollPane(table);

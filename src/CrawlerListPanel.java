@@ -4,7 +4,12 @@ import java.awt.*;
 public class CrawlerListPanel extends JPanel {
   private JList<String> list;
   private JPanel buttons;
-  private JButton add, remove;
+  private JButton add;
+  private JButton remove;
+
+
+
+  private JButton edit;
   private JScrollPane scroller;
 
   /*
@@ -22,6 +27,9 @@ public class CrawlerListPanel extends JPanel {
     return remove;
   }
 
+  JButton getEdit() {
+    return edit;
+  }
   /*
   Constructor
    */
@@ -36,9 +44,13 @@ public class CrawlerListPanel extends JPanel {
     remove = new JButton();
     remove.setText("rm");
 
+    edit = new JButton();
+    edit.setText("edit");
+
     buttons = new JPanel();
     buttons.add(add);
     buttons.add(remove);
+    buttons.add(edit);
 
     setLayout(new BorderLayout());
 

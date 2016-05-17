@@ -36,6 +36,13 @@ public class Hello_World extends JFrame{
         list.setListData(crawler.getElements());
     }
 
+    void elementEditAction(JList list){
+        String oldElement = (String)list.getSelectedValue(),
+                newElement = JOptionPane.showInputDialog("Edit Element",oldElement);
+        crawler.setElements(oldElement,newElement);
+        list.setListData(crawler.getElements());
+    }
+
     void selectorAddAction(JList lstElement, JList lstSelector){
         String selector = JOptionPane.showInputDialog("Add Selector");
         String element = (String)lstElement.getSelectedValue();
@@ -88,10 +95,12 @@ public class Hello_World extends JFrame{
         JList   elementList = crawlerPanel.getListElements().getList(),
                 selectorList = crawlerPanel.getListSelectors().getList();
         Map<String, List<String>> selectors = crawler.getSelectors();
-        JButton add, remove, process;
+        JButton add, remove, edit, process;
 
         remove = crawlerPanel.getListElements().getRemove();
         add = crawlerPanel.getListElements().getAdd();
+        edit = crawlerPanel.getListElements().getEdit();
+
         process = crawlerPanel.getProcess();
 
         process.addActionListener(new ActionListener() {
@@ -115,6 +124,12 @@ public class Hello_World extends JFrame{
             }
         });
 
+        edit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                elementEditAction(elementList);
+            }
+        });
         remove = crawlerPanel.getListSelectors().getRemove();
         add = crawlerPanel.getListSelectors().getAdd();
 

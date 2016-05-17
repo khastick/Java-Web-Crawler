@@ -2,9 +2,10 @@ Selectors have a name and a query. If a query is successful the selector's name 
 The selectors are stored with a comma separating the name and list of queries.
 
 To do
+Add an edit button for the selectors and the elements
+increase the size of the process button
+when the process button is pressed a file selector should appear that allows a user to select 1 or many files
 
-Load in each sites' links
-Enable the context of a search to be included
 UI
 Two list one is the context. The other is a list of selectors.
 At the bottom is a list of sites processed. As the sites are processed the list of elements appears next to the site.
@@ -19,3 +20,5 @@ When a list item is selected the delete button is enabled.
 Done
 Load in a list of sites
 When the add button is pressed a popup appears to enter a selector
+Load in each sites' links
+Enable the context of a search to be included
