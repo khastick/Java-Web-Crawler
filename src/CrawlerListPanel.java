@@ -30,6 +30,11 @@ public class CrawlerListPanel extends JPanel {
   JButton getEdit() {
     return edit;
   }
+
+  void setButtonEnable(Boolean state){
+        remove.setEnabled(state);
+    edit.setEnabled(state);
+  }
   /*
   Constructor
    */
@@ -43,9 +48,11 @@ public class CrawlerListPanel extends JPanel {
     
     remove = new JButton();
     remove.setText("rm");
+    remove.setEnabled(false);
 
     edit = new JButton();
     edit.setText("edit");
+    edit.setEnabled(false);
 
     buttons = new JPanel();
     buttons.add(add);

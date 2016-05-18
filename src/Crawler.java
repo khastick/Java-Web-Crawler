@@ -84,11 +84,13 @@ public class Crawler {
     Functions
      */
 
+    /*
     void processFiles(File[] files){
         for(int i = 0; i < files.length; i++){
             processFile(files[i]);
         }
     }
+    */
 
     void processFile(File f){
         List<String> links = extractLinks(f);

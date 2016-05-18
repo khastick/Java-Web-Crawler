@@ -1,3 +1,5 @@
+Description: Files of links are loaded in. Each link is processed to check if certain HTML elements are present.
+
 Selectors have a name and a query. If a query is successful the selector's name is written.
 The selectors are stored with a comma separating the name and list of queries.
 

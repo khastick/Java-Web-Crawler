@@ -24,27 +24,27 @@ public class Hello_World extends JFrame{
         new Hello_World().start();
     }
 
-    void elementAddAction(JList list){
+    void elementAddAction(CrawlerListPanel panel){
         String element = JOptionPane.showInputDialog("Add Element");
         Map<String, List<String>> selectors = crawler.getSelectors();
         selectors.put(element,new ArrayList<String>());
         list.setListData(crawler.getElements());
     }
 
-    void elementRemoveAction(JList list){
+    void elementRemoveAction(CrawlerListPanel panel){
         String element = (String)list.getSelectedValue();
         crawler.getSelectors().remove(element);
         list.setListData(crawler.getElements());
     }
 
-    void elementEditAction(JList list){
+    void elementEditAction(CrawlerListPanel panel){
         String oldElement = (String)list.getSelectedValue(),
                 newElement = JOptionPane.showInputDialog("Edit Element",oldElement);
         crawler.setElements(oldElement,newElement);
         list.setListData(crawler.getElements());
     }
 
-    void selectorEditAction(JList lstElement, JList lstSelector){
+    void selectorEditAction(CrawlerListPanel lstElement, CrawlerListPanel lstSelector){
         String element = (String)lstElement.getSelectedValue(),
                 selectedSelector,
                 selector;
@@ -59,7 +59,7 @@ public class Hello_World extends JFrame{
         lstSelector.setListData(selectorBody.toArray());
     }
 
-    void selectorAddAction(JList lstElement, JList lstSelector){
+    void selectorAddAction(CrawlerListPanel lstElement, CrawlerListPanel lstSelector){
         String selector = JOptionPane.showInputDialog("Add Selector");
         String element = (String)lstElement.getSelectedValue();
         Map<String, List<String>> selectors = crawler.getSelectors();
@@ -69,7 +69,7 @@ public class Hello_World extends JFrame{
         lstSelector.setListData(selectorBody.toArray());
     }
 
-    void selectorRemoveAction(JList lstElement, JList lstSelector){
+    void selectorRemoveAction(CrawlerListPanel lstElement, CrawlerListPanel lstSelector){
         String selector = (String)lstSelector.getSelectedValue(),
                 element = (String)lstElement.getSelectedValue();
         Map<String, List<String>> selectors = crawler.getSelectors();
@@ -79,20 +79,21 @@ public class Hello_World extends JFrame{
         lstSelector.setListData(selectorBody.toArray());
     }
 
-    void elementListSelect(ListSelectionEvent e, Map<String,List<String>> selectors,JList lstSelector ){
+    void elementListSelect(ListSelectionEvent e, Map<String,List<String>> selectors,CrawlerListPanel lstSelector ){
         JList list = (JList)e.getSource();
         String selected;
 
         selected = (String)list.getSelectedValue();
         List<String> selectorBody = selectors.get(selected);
+
         lstSelector.setListData(selectorBody.toArray());
     }
 
     void processAction(){
         JFileChooser fc = new JFileChooser();
         fc.showOpenDialog(this);
-        File[] files = fc.getSelectedFiles();
-        crawler.processFiles(files);
+        File f = fc.getSelectedFile();
+        crawler.processFile(f);
     }
 
     public void start(){
@@ -103,8 +104,8 @@ public class Hello_World extends JFrame{
                 crawler.getTable(),
                 crawler.getHeadings()
         );
-        JList   elementList = crawlerPanel.getListElements().getList(),
-                selectorList = crawlerPanel.getListSelectors().getList();
+        CrawlerListPanel   elementList = crawlerPanel.getListElements(),
+                selectorList = crawlerPanel.getListSelectors();
         Map<String, List<String>> selectors = crawler.getSelectors();
         JButton add, remove, edit, process;
 
