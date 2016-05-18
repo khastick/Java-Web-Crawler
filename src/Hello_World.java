@@ -43,6 +43,21 @@ public class Hello_World extends JFrame{
         list.setListData(crawler.getElements());
     }
 
+    void selectorEditAction(JList lstElement, JList lstSelector){
+        String element = (String)lstElement.getSelectedValue(),
+                selectedSelector,
+                selector;
+        Map<String, List<String>> selectors = crawler.getSelectors();
+        List<String> selectorBody = selectors.get(element);
+
+        selectedSelector = (String)lstSelector.getSelectedValue();
+        selector = JOptionPane.showInputDialog("Edit Selector",selectedSelector);
+
+        int index = selectorBody.indexOf(selectedSelector);
+        selectorBody.set(index,selector);
+        lstSelector.setListData(selectorBody.toArray());
+    }
+
     void selectorAddAction(JList lstElement, JList lstSelector){
         String selector = JOptionPane.showInputDialog("Add Selector");
         String element = (String)lstElement.getSelectedValue();
@@ -132,6 +147,7 @@ public class Hello_World extends JFrame{
         });
         remove = crawlerPanel.getListSelectors().getRemove();
         add = crawlerPanel.getListSelectors().getAdd();
+        edit = crawlerPanel.getListSelectors().getEdit();
 
         add.addActionListener(new ActionListener() {
             @Override
@@ -144,6 +160,13 @@ public class Hello_World extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectorRemoveAction(elementList,selectorList);
+            }
+        });
+
+        edit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectorEditAction(elementList,selectorList);
             }
         });
 
