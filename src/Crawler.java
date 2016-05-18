@@ -52,7 +52,6 @@ public class Crawler {
         List selector = selectors.get(oldKey);
         selectors.remove(oldKey);
         selectors.put(newKey,selector);
-
     }
 
      String[] getHeadings(){
@@ -84,6 +83,24 @@ public class Crawler {
     /*
     Functions
      */
+
+    void processFiles(File[] files){
+        for(int i = 0; i < files.length; i++){
+            processFile(files[i]);
+        }
+    }
+
+    void processFile(File f){
+        List<String> links = extractLinks(f);
+        String link;
+        String[] results;
+
+        for(int i = 0; i < links.size(); i++){
+            link = links.get(i);
+            results = processLink(link);
+            setTableRow(i,results);
+        }
+    }
 
      String[] processLink(String link){
         String[] results = {};
@@ -182,6 +199,28 @@ public class Crawler {
         } catch (IOException e) {
             System.out.print("An io error occurred when retrieving the list of links");
         }
+    }
+
+    private List<String> extractLinks(File f){
+        CSVParser parser;
+        int linksIndex = 0;
+        List<CSVRecord> records;
+        String link;
+        List<String> links = new ArrayList<String>();
+
+        try {
+            parser = CSVParser.parse(f, Charset.defaultCharset(), CSVFormat.DEFAULT);
+            records = parser.getRecords();
+            linksIndex = findLinksColumn(parser,records);
+            for(int i = 0; i < records.size(); i++){
+                link = records.get(i).get(linksIndex);
+                links.add(link);
+            }
+            return links;
+        } catch (IOException e) {
+            System.out.print("An io error occurred when retrieving the list of links");
+        }
+        return links;
     }
 
     private void saveSelectors(){

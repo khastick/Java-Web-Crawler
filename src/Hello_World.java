@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.util.*;
 
 import javax.swing.*;
@@ -88,15 +89,10 @@ public class Hello_World extends JFrame{
     }
 
     void processAction(){
-        List<String> links = crawler.getLinks();
-        String link;
-        String[] results;
-
-            for(int i = 0; i < links.size(); i++){
-                link = links.get(i);
-                results = crawler.processLink(link);
-                crawler.setTableRow(i,results);
-            }
+        JFileChooser fc = new JFileChooser();
+        fc.showOpenDialog(this);
+        File[] files = fc.getSelectedFiles();
+        crawler.processFiles(files);
     }
 
     public void start(){
