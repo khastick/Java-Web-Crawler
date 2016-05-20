@@ -4,12 +4,7 @@ import java.awt.*;
 public class CrawlerListPanel extends JPanel {
   private JList<String> list;
   private JPanel buttons;
-  private JButton add;
-  private JButton remove;
-
-
-
-  private JButton edit;
+  private JButton add,remove,edit;
   private JScrollPane scroller;
 
   /*
@@ -31,10 +26,19 @@ public class CrawlerListPanel extends JPanel {
     return edit;
   }
 
-  void setButtonEnable(Boolean state){
+  void setButtonEnable(){
+   boolean state = list.getSelectedIndex() != -1;
+    setButtonEnable(state);
+  }
+
+  /*
+  Helpers
+   */
+  private void setButtonEnable(Boolean state){
         remove.setEnabled(state);
     edit.setEnabled(state);
   }
+
   /*
   Constructor
    */

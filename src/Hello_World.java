@@ -25,6 +25,7 @@ public class Hello_World extends JFrame{
     }
 
     void elementAddAction(CrawlerListPanel panel){
+        JList list = panel.getList();
         String element = JOptionPane.showInputDialog("Add Element");
         Map<String, List<String>> selectors = crawler.getSelectors();
         selectors.put(element,new ArrayList<String>());
@@ -32,19 +33,25 @@ public class Hello_World extends JFrame{
     }
 
     void elementRemoveAction(CrawlerListPanel panel){
+        JList list = panel.getList();
         String element = (String)list.getSelectedValue();
         crawler.getSelectors().remove(element);
         list.setListData(crawler.getElements());
+        panel.setButtonEnable();
     }
 
     void elementEditAction(CrawlerListPanel panel){
+        JList list = panel.getList();
         String oldElement = (String)list.getSelectedValue(),
                 newElement = JOptionPane.showInputDialog("Edit Element",oldElement);
         crawler.setElements(oldElement,newElement);
         list.setListData(crawler.getElements());
+        panel.setButtonEnable();
     }
 
-    void selectorEditAction(CrawlerListPanel lstElement, CrawlerListPanel lstSelector){
+    void selectorEditAction(CrawlerListPanel panelElement, CrawlerListPanel panelSelector){
+        JList lstElement = panelElement.getList(),
+                lstSelector = panelSelector.getList();
         String element = (String)lstElement.getSelectedValue(),
                 selectedSelector,
                 selector;
@@ -57,9 +64,12 @@ public class Hello_World extends JFrame{
         int index = selectorBody.indexOf(selectedSelector);
         selectorBody.set(index,selector);
         lstSelector.setListData(selectorBody.toArray());
+        panelSelector.setButtonEnable();
     }
 
-    void selectorAddAction(CrawlerListPanel lstElement, CrawlerListPanel lstSelector){
+    void selectorAddAction(CrawlerListPanel panelElement, CrawlerListPanel panelSelector){
+        JList lstElement = panelElement.getList(),
+                lstSelector = panelSelector.getList();
         String selector = JOptionPane.showInputDialog("Add Selector");
         String element = (String)lstElement.getSelectedValue();
         Map<String, List<String>> selectors = crawler.getSelectors();
@@ -69,7 +79,9 @@ public class Hello_World extends JFrame{
         lstSelector.setListData(selectorBody.toArray());
     }
 
-    void selectorRemoveAction(CrawlerListPanel lstElement, CrawlerListPanel lstSelector){
+    void selectorRemoveAction(CrawlerListPanel panelElement, CrawlerListPanel panelSelector){
+        JList lstElement = panelElement.getList(),
+                lstSelector = panelSelector.getList();
         String selector = (String)lstSelector.getSelectedValue(),
                 element = (String)lstElement.getSelectedValue();
         Map<String, List<String>> selectors = crawler.getSelectors();
@@ -77,16 +89,26 @@ public class Hello_World extends JFrame{
 
         selectorBody.remove(selector);
         lstSelector.setListData(selectorBody.toArray());
+        panelSelector.setButtonEnable();
     }
 
-    void elementListSelect(ListSelectionEvent e, Map<String,List<String>> selectors,CrawlerListPanel lstSelector ){
-        JList list = (JList)e.getSource();
+    void elementListSelect(ListSelectionEvent e, Map<String,List<String>> selectors,
+                           CrawlerListPanel panelElement, CrawlerListPanel panelSelector ){
+        JList list = (JList)e.getSource(),
+                lstSelector = panelSelector.getList();
         String selected;
 
         selected = (String)list.getSelectedValue();
         List<String> selectorBody = selectors.get(selected);
 
         lstSelector.setListData(selectorBody.toArray());
+        panelSelector.setButtonEnable();
+        panelElement.setButtonEnable();
+    }
+
+    void selectorListSelect(ListSelectionEvent e, CrawlerListPanel panelSelector){
+        JList list = panelSelector.getList();
+        panelSelector.setButtonEnable();
     }
 
     void processAction(){
@@ -167,10 +189,17 @@ public class Hello_World extends JFrame{
             }
         });
 
-        elementList.addListSelectionListener(new ListSelectionListener() {
+        elementList.getList().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                elementListSelect(e,selectors,selectorList);
+                elementListSelect(e,selectors,elementList,selectorList);
+            }
+        });
+
+        selectorList.getList().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                selectorListSelect(e,selectorList);
             }
         });
 
